@@ -26,7 +26,7 @@ public class Stock
 	{
 		Order order = new Order();
 
-		for(var drink : amounts)
+		for(DrinkAmount drink : amounts)
 		{
 			DrinkAmount myAmounts = getDrink(drink.getDrink());
 
