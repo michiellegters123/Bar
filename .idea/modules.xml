@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/BartenderGui/BartenderGui.iml" filepath="$PROJECT_DIR$/BartenderGui/BartenderGui.iml" />
       <module fileurl="file://$PROJECT_DIR$/Core/Core.iml" filepath="$PROJECT_DIR$/Core/Core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Gui/Gui.iml" filepath="$PROJECT_DIR$/Gui/Gui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/WaitressGui/WaitressGui.iml" filepath="$PROJECT_DIR$/WaitressGui/WaitressGui.iml" />
     </modules>
   </component>
 </project>
