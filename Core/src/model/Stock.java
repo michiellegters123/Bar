@@ -22,9 +22,9 @@ public class Stock
 		return drinks.values().toArray(new DrinkAmount[0]);
 	}
 
-	public Order createOrder(Collection<DrinkAmount> amounts)
+	public Order createOrder(Collection<DrinkAmount> amounts, String table)
 	{
-		Order order = new Order();
+		Order order = new Order(table);
 
 		for(DrinkAmount drink : amounts)
 		{
