@@ -7,8 +7,7 @@ import model.DrinkAmount;
 import model.Order;
 import model.OrderQueue;
 
-import java.util.Arrays;
-import java.util.Collection;
+import java.sql.*;
 import java.util.Collections;
 
 public class MainController
@@ -27,27 +26,30 @@ public class MainController
 	@FXML
 	private Button takeOrder, completeOrder;
 
-	@FXML ListView<DrinkAmount> currentOrderList;
+	@FXML
+	ListView<DrinkAmount> currentOrderList;
 	private ObservableList<DrinkAmount> currentOrderItems = FXCollections.observableArrayList();
 
 
 	OrderQueue orderQueue = new OrderQueue();
 	Order currentOrder = null;
+	Connection connection;
 
-	public void initialize()
+	public void initialize() throws SQLException
 	{
+		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bar-db", "root", "");
+
 		takeOrder.setOnAction(e ->
 		{
 			try
 			{
-				if(currentOrder != null)
+				if (currentOrder != null)
 					throw new Exception("You still have not completed your previous order");
 
 				currentOrder = orderQueue.consumeOrder();
 				updateQueue();
 				updateCurrentOrder();
-			}
-			catch (Exception ex)
+			} catch (Exception ex)
 			{
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("Queue error");
@@ -79,23 +81,43 @@ public class MainController
 		currentOrderList.setItems(currentOrderItems);
 		currentOrderList.setCellFactory(x -> createAmountCell());
 
-		Order order = new Order();
-		order.addDrink(new DrinkAmount(new Drink("Corona", 10), 2));
-		orderQueue.addOrder(order);
-
-		Order order2 = new Order();
-		order2.addDrink(new DrinkAmount(new Drink("Brant", 2), 15));
-		orderQueue.addOrder(order2);
-		updateQueue();
+		refreshQueue();
 	}
 
+	private void refreshQueue() throws SQLException
+	{
+		Statement stmt = connection.createStatement();
+		Statement stmtDrinks = connection.createStatement();
+
+		ResultSet result = stmt.executeQuery("SELECT * FROM orders WHERE price_paid IS NULL");
+
+		while (result.next())
+		{
+			ResultSet drinkResult = stmtDrinks.executeQuery("SELECT drinks.*, oders_drinks_junction.count FROM oders_drinks_junction \n" + "LEFT JOIN drinks ON oders_drinks_junction.drink_id = drinks.drink_id\n" + "WHERE order_id = 1");
+
+			Order order = new Order(result.getString("table_code"));
+
+			while (drinkResult.next())
+			{
+				order.addDrink(new DrinkAmount(new Drink(drinkResult.getString("name"), drinkResult.getInt("price")), drinkResult.getInt("count")));
+			}
+
+			orderQueue.addOrder(order);
+
+			drinkResult.close();
+		}
+
+		result.close();
+
+		updateQueue();
+	}
 
 	private void updateQueue()
 	{
 		orderItems.setAll(orderQueue.getOrders());
 		Collections.reverse(orderItems);
 
-		if(orderQueue.getOrderCount() > 0)
+		if (orderQueue.getOrderCount() > 0)
 		{
 			Order next = orderQueue.getNextOrder();
 			previewItems.setAll(next.getDrinks());
@@ -112,7 +134,7 @@ public class MainController
 
 	private void updateCurrentOrder()
 	{
-		if(currentOrder != null)
+		if (currentOrder != null)
 		{
 			completeOrder.setDisable(false);
 			currentOrderItems.setAll(currentOrder.getDrinks());
@@ -159,7 +181,7 @@ public class MainController
 					return;
 				}
 
-				setText(item.getDrink().getName() +  " x " + item.getCount());
+				setText(item.getDrink().getName() + " x " + item.getCount());
 			}
 		};
 	}
