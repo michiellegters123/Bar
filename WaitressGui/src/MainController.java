@@ -9,7 +9,7 @@ import model.Drink;
 import model.DrinkAmount;
 import model.Order;
 
-import java.util.List;
+import java.sql.*;
 
 public class MainController
 {
@@ -31,13 +31,22 @@ public class MainController
 
 	private ObservableList<DrinkAmount> Dranken = FXCollections.observableArrayList();
 	private ObservableList<DrinkAmount> besteldeDranken = FXCollections.observableArrayList();
+	private ObservableList<String> afgerond = FXCollections.observableArrayList();
+	private Connection connection;
 
-	Order order = new Order();
+	Order order = new Order("1");
 
-	public void initialize()
+	public void initialize() throws SQLException
 	{
+		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bardb", "root", "");
 
+		Statement stmtDrinks = connection.createStatement();
 
+		ResultSet result = stmtDrinks.executeQuery("SELECT * FROM oders WHERE price_paid NOT NULL");
+		while(result.next())
+		{
+			afgerond.add(result.toString());
+		}
 
 		Dranken.add(new DrinkAmount(new Drink("Corona", 5), 112));
 		Dranken.add(new DrinkAmount(new Drink("Bier", 4), 112));
