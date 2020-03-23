@@ -24,7 +24,7 @@ public class MainController
 	private Label previewPrice, previewDrinkCount, currentTotalPrice;
 
 	@FXML
-	private Button takeOrder, completeOrder;
+	private Button takeOrder, completeOrder, refreshButton;
 
 	@FXML
 	ListView<DrinkAmount> currentOrderList;
@@ -37,7 +37,7 @@ public class MainController
 
 	public void initialize() throws SQLException
 	{
-		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bar-db", "root", "");
+		connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/bardb", "root", "");
 
 		takeOrder.setOnAction(e ->
 		{
@@ -62,8 +62,29 @@ public class MainController
 
 		completeOrder.setOnAction(e ->
 		{
-			currentOrder = null;
-			updateCurrentOrder();
+			try
+			{
+				Statement stmt = connection.createStatement();
+
+				stmt.executeUpdate("UPDATE orders SET price_paid = " + currentOrder.getPrice() + " WHERE order_id = " + currentOrder.getId());
+
+				currentOrder = null;
+				updateCurrentOrder();
+			} catch (SQLException ex)
+			{
+				ex.printStackTrace();
+			}
+		});
+
+		refreshButton.setOnAction(e ->
+		{
+			try
+			{
+				refreshQueue();
+			} catch (SQLException ex)
+			{
+				ex.printStackTrace();
+			}
 		});
 
 		orders.setMouseTransparent(true);
@@ -93,9 +114,11 @@ public class MainController
 
 		while (result.next())
 		{
-			ResultSet drinkResult = stmtDrinks.executeQuery("SELECT drinks.*, oders_drinks_junction.count FROM oders_drinks_junction \n" + "LEFT JOIN drinks ON oders_drinks_junction.drink_id = drinks.drink_id\n" + "WHERE order_id = 1");
 
 			Order order = new Order(result.getString("table_code"));
+			order.setId(result.getInt("order_id"));
+
+			ResultSet drinkResult = stmtDrinks.executeQuery("SELECT drinks.*, oders_drinks_junction.count FROM oders_drinks_junction \n" + "LEFT JOIN drinks ON oders_drinks_junction.drink_id = drinks.drink_id\n" + "WHERE order_id = " + order.getId());
 
 			while (drinkResult.next())
 			{
