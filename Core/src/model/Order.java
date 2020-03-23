@@ -36,4 +36,9 @@ public class Order
 	{
 		return drinks.stream().mapToInt(DrinkAmount::getPrice).sum();
 	}
+
+	public DrinkAmount[] getDrinks()
+	{
+		return drinks.toArray(new DrinkAmount[0]);
+	}
 }
