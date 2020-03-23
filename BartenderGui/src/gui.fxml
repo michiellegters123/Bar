@@ -50,7 +50,7 @@
       </AnchorPane>
       <AnchorPane layoutX="1066.0" layoutY="14.0" prefHeight="700.0" prefWidth="240.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>
-            <Label layoutY="-3.0" text="Current Order">
+            <Label layoutY="5.0" text="Current Order">
                <font>
                   <Font size="24.0" />
                </font>
@@ -72,5 +72,6 @@
             </GridPane>
          </children>
       </AnchorPane>
+      <Button fx:id="refreshButton" layoutX="886.0" layoutY="84.0" mnemonicParsing="false" text="Refresh" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="5.0" />
    </children>
 </AnchorPane>

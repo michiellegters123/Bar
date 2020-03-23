@@ -6,6 +6,7 @@ public class Order
 {
 	private ArrayList<DrinkAmount> drinks;
 	private String table;
+	private int id;
 
 	public Order(String table)
 	{
@@ -53,5 +54,15 @@ public class Order
 	public void setTable(String table)
 	{
 		this.table = table;
+	}
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
 	}
 }
