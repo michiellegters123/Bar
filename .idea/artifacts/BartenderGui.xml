@@ -1,0 +1,25 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="BartenderGui">
+    <output-path>$PROJECT_DIR$/out/artifacts/BartenderGui</output-path>
+    <properties id="javafx-properties">
+      <options>
+        <option name="appClass" value="BartenderApplication" />
+        <option name="description" value="Een mooie app" />
+        <option name="height" value="720" />
+        <option name="htmlPlaceholderId" value="" />
+        <option name="nativeBundle" value="msi" />
+        <option name="title" value="Bartender Application" />
+        <option name="vendor" value="" />
+        <option name="version" value="1.0" />
+        <option name="width" value="1280" />
+      </options>
+    </properties>
+    <root id="root">
+      <element id="archive" name="BartenderGui.jar">
+        <element id="module-output" name="Core" />
+        <element id="module-output" name="BartenderGui" />
+        <element id="library" level="project" name="mysql:mysql-connector-java:8.0.19" />
+      </element>
+    </root>
+  </artifact>
+</component>
