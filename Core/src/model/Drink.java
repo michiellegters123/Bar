@@ -2,6 +2,7 @@ package model;
 
 public class Drink
 {
+	private int drinkId;
 	private int price;
 	private String name;
 
@@ -26,8 +27,19 @@ public class Drink
 		return price;
 	}
 
+
 	public void setPrice(int price)
 	{
 		this.price = price;
+	}
+
+	public int getDrinkId()
+	{
+		return drinkId;
+	}
+
+	public void setDrinkId(int drinkId)
+	{
+		this.drinkId = drinkId;
 	}
 }
